@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="ejercicioArrays.js"></script>
+    <title>Ejercicio Arrays 2</title>
+    <style>
+        table td{
+            border: 1px solid black;
+        }
+        #tableContainer{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    
+    <label for="jsonSelector">Selecciona un JSON:</label>
+    <select id="jsonSelector">
+        <option value="pokemon">POKEMON</option>
+        <option value="municipios">MUNICIPIOS</option>
+        <option value="movies">MOVIES</option>
+        <option value="meteoritos">METEORITOS</option>
+    </select>
+
+    <button class="printList" onclick="escogerTabla()">Print List</button>
+    <button class="mostrarTabla" onclick="mostrarTabla()">Mostrar Tabla</button>
+    <button class="reload" onclick="reload()">Refresh</button>
+    <button>Orden Ascendente</button>
+    <button>Orden Desdendente</button>
+    <button>Search</button>
+    <button>Mediana</button>
+    <div id="tableContainer">
+        
+    </div>
+
+</body>
+</html>
