@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="ejercicioArrays.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+   
     <title>Ejercicio Arrays 2</title>
     <style>
         table td{
@@ -14,25 +16,53 @@
             align-items: center;
             justify-content: center;
         }
+
+        .grafica{
+            display: flex;
+            align-items: center;
+            justify-content: center; 
+        }
+        #myChart{
+                display: flex;
+            align-items: center;
+            justify-content: center; 
+        }
+        .botones{
+            display: flex;
+            align-items: center;
+            justify-content: center; 
+        }
+        .botones:nth-child(8){
+            border: 1px solid green;
+        }
     </style>
 </head>
-<body>
-    
-    <label for="jsonSelector">Selecciona un JSON:</label>
-    <select id="jsonSelector">
-        <option value="pokemon">POKEMON</option>
-        <option value="municipios">MUNICIPIOS</option>
-        <option value="movies">MOVIES</option>
-        <option value="meteoritos">METEORITOS</option>
-    </select>
-
-    <button class="printList" onclick="escogerTabla()">Print List</button>
-    <button class="mostrarTabla" onclick="mostrarTabla()">Mostrar Tabla</button>
-    <button class="reload" onclick="reload()">Refresh</button>
-    <button>Orden Ascendente</button>
-    <button>Orden Desdendente</button>
-    <button>Search</button>
-    <button>Mediana</button>
+<!-- onload="mostrarGrafico(); -->
+<body onload="searchEvent() ; mostrarGrafico()">
+    <div class="selector">
+        <label for="jsonSelector">Selecciona un JSON:</label>
+        <select id="jsonSelector">
+            <option value="pokemon">POKEMON</option>
+            <option value="municipios">MUNICIPIOS</option>
+            <option value="movies">MOVIES</option>
+            <option value="meteoritos">METEORITOS</option>
+        </select>
+    </div>
+    <div class="botones">
+        <button class="printList" onclick="escogerTabla()">Print List</button>
+        <button class="mostrarTabla" onclick="mostrarTabla()">Mostrar Tabla</button>
+        <button class="mostrarTabla" onclick="grafico()">Mostrar Grafica</button>
+        <button class="reload" onclick="reload()">Refresh</button>
+        <button onclick="orderList('asc')">Orden Ascendente</button>
+        <button onclick="orderList('des')">Orden Desdendente</button>
+        <label for="txtSearch">Search</label>
+        <input type="text" value="" id="txtSearch" />
+    </div>
+    <div class="grafica">
+        <div class="chart-container" style="position: relative; width:500px" >
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
     <div id="tableContainer">
         
     </div>

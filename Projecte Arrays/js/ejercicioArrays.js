@@ -56,6 +56,24 @@ function mostrarTabla() {
         .catch(error => console.error('Error al cargar los datos:', error));
 }
 
+let pokemons;
+let listaPokemons=[];
+const headersPokemons= ["num","name","type","weaknesses","height", "weight", "img"];
+
+let municipios;
+let listaMunicipios=[];
+const headersMunicipios= ["ine","municipi_nom","nombre_habitants", "extensio", "altitud", "municipi_escut"];
+
+let listaMovies = [];
+const headersMovies = ["title","genres", "year","url"];
+let movies;
+
+let meteoritos;
+let listaMeteoritos=[];
+const headersMeteoritos = ["id","name", "year","mass"];
+
+
+
 //Segundo boton que hace el reload de la pantalla. 
 function reload(){
     location.reload();
@@ -70,18 +88,7 @@ function orderDescend(arrayM){
     return arrayM;
 }
 
-function orderList(word){
-    if (word === 'asc'){
-        return orderAscend()
-    }else{
-        return orderDescend()
-    }
-}
 
-
-let pokemons;
-let listaPokemons=[];
-const headersPokemons= ["num","name","type","weaknesses","height", "weight", "img"];
 (async()=>{
     try {
         const response = await fetch('data/pokemon.json');
@@ -97,9 +104,7 @@ const headersPokemons= ["num","name","type","weaknesses","height", "weight", "im
     });
     })();
 
-let municipios;
-let listaMunicipios=[];
-const headersMunicipios= ["ine","municipi_nom","nombre_habitants", "extensio", "altitud", "municipi_escut"];
+
 (async()=>{
     try {
         const response = await fetch('data/municipis.json');
@@ -115,9 +120,7 @@ const headersMunicipios= ["ine","municipi_nom","nombre_habitants", "extensio", "
     });
     })();
 
-let listaMovies = [];
-const headersMovies = ["title","genres", "year","url"];
-let movies;
+
 (async()=>{
     try {
         const response = await fetch('data/movies.json');
@@ -133,23 +136,21 @@ let movies;
     });
     })();
     
-    let meteoritos;
-    let listaMeteoritos=[];
-    const headersMeteoritos = ["id","name", "year","mass"];
-    (async()=>{
-        try {
-            const response = await fetch('data/earthMeteorites.json');
-            if (!response.ok) {
-                throw new Error('Error al cargar el archivo JSON');
-            }
-             meteoritos = await response.json();
-        } catch (error) {
-            console.error('Error:', error);
+
+(async()=>{
+    try {
+        const response = await fetch('data/earthMeteorites.json');
+        if (!response.ok) {
+            throw new Error('Error al cargar el archivo JSON');
         }
-            meteoritos.meteoritos.forEach(function(movie){
-            listaMeteoritos.push([meteoritos.id, movie.name, movie.year, movie.mass]);
-        });
-        })();
+            meteoritos = await response.json();
+    } catch (error) {
+        console.error('Error:', error);
+    }
+        meteoritos.meteoritos.forEach(function(movie){
+        listaMeteoritos.push([meteoritos.id, movie.name, movie.year, movie.mass]);
+    });
+    })();
        
 function printTabla(listaJson, headers){
     const tableContainer = document.getElementById("tableContainer");
@@ -180,11 +181,78 @@ function printTabla(listaJson, headers){
 
 }
 
+function orderList(word){
+    const selectedJson = document.getElementById("jsonSelector").value;
+    let listaOrdenada= []
+    let tabla=[]
+    switch (selectedJson) {
+        case "pokemon":
+            listaOrdenada = listaPokemons;
+            if (word === 'asc'){
+                 orderAscend(listaOrdenada)
+            }else{
+                 orderDescend(listaOrdenada)
+            }
+            printTabla(listaOrdenada, headersPokemons);
+            break;
+        case "municipios":
+            listaOrdenada = listaMunicipios;
+            if (word === 'asc'){
+                 orderAscend(listaOrdenada)
+            }else{
+                 orderDescend(listaOrdenada)
+            }
+            printTabla(listaOrdenada,headersMunicipios);
+            break;
+        case "movies":
+            listaOrdenada = listaMovies;
+            if (word === 'asc'){
+                 orderAscend(listaOrdenada)
+            }else{
+                 orderDescend(listaOrdenada)
+            }
+            printTabla(listaOrdenada, headersMovies);
+            break;
+        case "meteoritos":
+            listaOrdenada = listaMeteoritos;
+            if (word === 'asc'){
+                 orderAscend(listaOrdenada)
+            }else{
+                 orderDescend(listaOrdenada)
+            }
+            printTabla(listaOrdenada, headersMeteoritos);
+            break;
+    }
+}
+function searchList(palabra){
+    palabra.toLowerCase
+    const selectedJson = document.getElementById("jsonSelector").value;
+    let newLista=[]
+    switch (selectedJson) {
+        case "pokemon":
+            newLista = listaPokemons.filter(pokemons => pokemons[1].toLowerCase().includes(palabra));
+            printTabla(newLista, headersPokemons)
+            break;
+        case "municipios":
+            newLista = listaMunicipios.filter(municipios => municipios[1].toLowerCase().includes(palabra));
+            printTabla(newLista,headersMunicipios);
+            break;
+        case "movies":
+            newLista = listaMovies.filter(movies => movies[0].toLowerCase().includes(palabra));
+            printTabla(newLista,headersMovies);
+            break;
+        case "meteoritos":
+            newLista = listaMeteoritos.filter(meteoritos => meteoritos[1].toLowerCase().includes(palabra));
+            printTabla(newLista,headersMeteoritos);
+            break;
+    }
+}
+
+
+
 async function escogerTabla() {
     const selectedJson = document.getElementById("jsonSelector").value;
 
-    // Obtener el JSON correspondiente según la selección
-    let jsonToDisplay;
     switch (selectedJson) {
         case "pokemon":
             printTabla(listaPokemons,headersPokemons);
@@ -199,4 +267,82 @@ async function escogerTabla() {
             printTabla(listaMeteoritos,headersMeteoritos);
             break;
     }
+
 }    
+let pokemonTypes = ["Grass","Poison","Fire","Flying","Water","Bug","Normal","Electric","Ground","Fighting","Psychic","Rock",
+    "Ice","Ghost","Dragon"];
+let pokemonTypesData= [14, 33, 12, 19, 32, 12, 24, 9, 14, 8, 14, 11, 5, 3, 3];
+let moviesGenres= ["Drama", "Crime", "Action", "Thriller", "Biography", "History", "Adventure", "Fantasy", "Western", "Romance", "Sci-Fi", "Mystery", "Comedy", "War", "Family", "Animation", "Musical", "Music", "Horror", "Film-Noir", "Sport"];
+let movesGenresData= [85, 53, 39, 60, 27, 15, 57, 28, 8, 27, 32, 33, 44, 28, 25, 22, 5, 8, 4, 6, 10];
+
+function randomColor(array){
+    let randomColor = []
+    array.forEach(function(e){
+        let color1=Math.floor(Math.random() * 256);
+        let color2=Math.floor(Math.random() * 256);
+        let color3=Math.floor(Math.random() * 256);
+        randomColor.push(`rgba(${color1},${color2},${color3}`);
+    })
+        return randomColor;
+  }
+
+  function colorSelect(array, word){
+    let array2=[]
+    let color;
+    array.forEach(function (e){
+       if(word == 'borde'){
+        color= e + ')';
+        array2.push(color);
+       }else{
+        color= e + ',0.4)';
+        array2.push(color);
+       }
+    });
+    return array2;
+  }
+ 
+colorPok=randomColor(pokemonTypes)
+colorMovies=randomColor(moviesGenres)
+
+function grafico(){
+    const selectedJson = document.getElementById("jsonSelector").value;
+    switch (selectedJson) {
+        case "pokemon":
+            mostrarGrafico(pokemonTypes,"Tipos de Pokemon", pokemonTypesData, colorPok)
+            break;;
+        case "movies":
+            mostrarGrafico(moviesGenres,"Generos de Peliculas", movesGenresData, colorMovies)
+            break;
+    }
+
+}
+
+function mostrarGrafico(header, label, data, color){
+    const ctx = document.getElementById('myChart');
+    new Chart(ctx, {
+        type: 'polarArea',
+      data: {
+        labels: header,
+          datasets: [{
+            label: label,
+            data: data,
+            borderColor: colorSelect(color,'border'),
+            backgroundColor: colorSelect(color,'ground')
+          }],
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true
+          }
+        }
+      }
+    });
+}
+
+function searchEvent(){
+    let inputSearch = document.getElementById('txtSearch')
+    inputSearch.addEventListener('input', (e) => {
+       searchList(e.target.value)
+});
+}
